@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+open() {
+  case $1 in
+    all)
+      WINDOWS=$(~/.local/bin/eww windows)
+      for window in $WINDOWS
+      do
+        open "${window//\*}"
+      done
+      ;;
+    *)
+      WIDGET_STATE=$(~/.local/bin/eww state | grep "$1" | awk '{print $2}' | head -1)
+      if $WIDGET_STATE; then
+        ~/.local/bin/eww update $1=false
+      else
+        ~/.local/bin/eww open $1
+        ~/.local/bin/eww update $1=true
+      fi
+      ;;
+  esac
+}
+
+open $1

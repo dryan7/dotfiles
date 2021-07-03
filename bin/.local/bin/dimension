@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+GEOMETRY=$(slurp -f "%x %y %w %h %o")
+X=$(echo $GEOMETRY | awk '{printf $1}')
+Y=$(echo $GEOMETRY | awk '{printf $2}')
+WIDTH=$(echo $GEOMETRY | awk '{printf $3}')
+HEIGHT=$(echo $GEOMETRY | awk '{printf $4}')
+OUTPUT=$(echo $GEOMETRY | awk '{printf $5}')
+
+case $OUTPUT in
+  DP-2 )
+    X=$((X-2560))
+    ;;
+esac
+
+if [[ $Y -ge 40 ]]; then
+  Y=$((Y-40))
+else
+  Y=0
+fi
+
+riverctl set-layout-value kile string dimension "$X $Y $WIDTH $HEIGHT"
